@@ -39,15 +39,25 @@ The Wazuh server receives logs and events from the web server via the Wazuh agen
 
 You can imagine the architecture like this:
 ```text
-+----------------+          +-----------------+
-|  Web Browser   |  HTTPS   |  Wazuh Server   |
-| (host machine) | <------> |  (wazuhserver)  |
-+----------------+          +--------+--------+
-                                      ^
-                                      | Wazuh Agent (TCP/1514)
-                                      |
-                            +---------+---------+
-                            |   Web Server      |
-                            | (wazuh-server)    |
-                            | Nginx + SSH logs  |
-                            +-------------------+
+                (Your Host PC)
+              +----------------+
+              |  Web Browser    |
+              |  https://wazuhserver:55000 |
+              +---------+------+
+                        |
+                        |  HTTPS (Dashboard)
+                        v
+              +---------+--------------------+
+              |        Wazuh Server         |
+              |  - Manager (TCP/1514)       |
+              |  - Dashboard (TCP/55000)    |
+              +-------------+---------------+
+                            ^
+                            |  Agent Communication (TCP/1514)
+                            |
+                 +----------+-----------+
+                 |   Web Server (Agent) |
+                 | - wazuh-agent        |
+                 | - Nginx + SSH logs   |
+                 +----------------------+
+
